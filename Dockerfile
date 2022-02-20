@@ -1,7 +1,7 @@
 FROM ubuntu:latest as system
 LABEL AboutImage "Ubuntu20.04_Fluxbox_NoVNC"
 LABEL Maintainer "HackGodX"
-ARG DEBIAN_FRONTEND=noninteractive
+ARG localbuild
 ENV DEBIAN_FRONTEND=noninteractive \
 #VNC Server Password
 	VNC_PASS="samplepass" \
@@ -72,6 +72,7 @@ RUN apt-get update && \
 	novnc \
 	openvpn \
 	ffmpeg \
+	openssh-server pwgen \
 	screen \
 #Fluxbox
 	/app/fluxbox-heroku-mod.deb && \
@@ -122,6 +123,16 @@ RUN apt-get update && \
 	apt install -y /tmp/packages-microsoft-prod.deb && \
 	apt update && \
 	apt-get install -y powershell
+# tini for subreap                                   
+ARG TINI_VERSION=v0.14.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /bin/tini
+RUN chmod +x /bin/tini
+
+ADD files /root
+
+# ffmpeg
+RUN mkdir -p /usr/local/ffmpeg && \
+    curl -sSL https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz | tar xJvf - -C /usr/local/ffmpeg/ --strip 1
 
 ENTRYPOINT ["supervisord", "-c"]
 

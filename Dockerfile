@@ -21,23 +21,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
 	LC_ALL=C.UTF-8 \
 	TZ="Asia/Kolkata"
 
-RUN apt update && apt install  openssh-server sudo -y
-
-RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 test 
-
-RUN  echo 'test:test' | chpasswd
-
-RUN service ssh start
-
-EXPOSE 22
-
-CMD ["/usr/sbin/sshd","-D"]
 COPY . /app
-RUN rm -rf /etc/apt/sources.list && \
-#All Official Focal Repos
-	bash -c 'echo -e "deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse\ndeb-src http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse\ndeb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe multiverse\ndeb-src http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe multiverse\ndeb http://archive.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse\ndeb-src http://archive.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse\ndeb http://archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse\ndeb-src http://archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse\ndeb http://archive.canonical.com/ubuntu focal partner\ndeb-src http://archive.canonical.com/ubuntu focal partner" >/etc/apt/sources.list' && \
-	rm /bin/sh && ln -s /bin/bash /bin/sh && \
-	apt-get update && \
+RUN apt-get update && \
 	apt-get install -y \
 #Packages Installation
 	tzdata \

@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:latest as system
 LABEL AboutImage "Ubuntu20.04_Fluxbox_NoVNC"
 LABEL Maintainer "HackGodX"
 ARG DEBIAN_FRONTEND=noninteractive

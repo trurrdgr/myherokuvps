@@ -20,7 +20,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 	LANGUAGE=en_US.UTF-8 \
 	LC_ALL=C.UTF-8 \
 	TZ="Asia/Kolkata"
-
+RUN if [ "x$localbuild" != "x" ]; then sed -i 's#http://archive.ubuntu.com/#http://tw.archive.ubuntu.com/#' /etc/apt/sources.list; fi
 COPY . /app
 RUN apt-get update && \
 	apt-get install -y \

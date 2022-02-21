@@ -1,4 +1,4 @@
-FROM ubuntu:latest as system
+FROM kalilinux/kali-last-release as system
 LABEL AboutImage "Ubuntu20.04_Fluxbox_NoVNC"
 LABEL Maintainer "HackGodX"
 ARG localbuild
@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 #VNC Server Password
 	VNC_PASS="samplepass" \
 #VNC Server Title(w/o spaces)
-	VNC_TITLE="Ubuntu_Desktop" \
+	VNC_TITLE="Kali" \
 #VNC Resolution(720p is preferable)
 	VNC_RESOLUTION="1920x1080" \
 #Local Display Server Port
@@ -20,7 +20,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 	LANGUAGE=en_US.UTF-8 \
 	LC_ALL=C.UTF-8 \
 	TZ="Asia/Kolkata"
-RUN if [ "x$localbuild" != "x" ]; then sed -i 's#http://archive.ubuntu.com/#http://tw.archive.ubuntu.com/#' /etc/apt/sources.list; fi
+RUN apt install -y novnc x11vnc
 COPY . /app
 RUN apt-get update && \
 	apt-get install -y \
@@ -128,7 +128,7 @@ ARG TINI_VERSION=v0.14.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /bin/tini
 RUN chmod +x /bin/tini
 
-ADD files /root
+#ADD files /root
 
 # ffmpeg
 RUN mkdir -p /usr/local/ffmpeg && \
